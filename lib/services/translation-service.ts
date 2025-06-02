@@ -3,9 +3,19 @@ import fs from 'fs';
 import { TranslationRequest, TranslationResult } from '@/types';
 
 export class TranslationService {
-  private static openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-  });
+  private static _openai: OpenAI | null = null;
+
+  private static get openai(): OpenAI {
+    if (!this._openai) {
+      if (!process.env.OPENAI_API_KEY) {
+        throw new Error('OPENAI_API_KEY environment variable is not set');
+      }
+      this._openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY
+      });
+    }
+    return this._openai;
+  }
 
   static async transcribeAndTranslate(request: TranslationRequest): Promise<TranslationResult> {
     try {
