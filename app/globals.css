@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  body {
+    @apply bg-black text-white min-h-screen overflow-x-hidden;
+  }
+}
+
+@layer components {
+  .glassmorphism {
+    @apply bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_32px_64px_rgba(0,0,0,0.4)];
+  }
+  
+  .glassmorphism::before {
+    content: '';
+    @apply absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-t-3xl;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-br from-white to-white/60 bg-clip-text text-transparent;
+  }
+  
+  .shimmer::before {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent;
+    animation: shimmer 2s linear infinite;
+    transform: translateX(-100%);
+  }
+  
+  .input-glass {
+    @apply w-full px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-white/40 transition-all duration-300 focus:border-white/30 focus:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/5;
+  }
+  
+  .select-glass {
+    @apply w-full px-5 py-4 bg-white/5 border border-white/10 rounded-xl text-white transition-all duration-300 focus:border-white/30 focus:bg-white/10 focus:outline-none appearance-none cursor-pointer;
+  }
+  
+  .btn-primary {
+    @apply w-full px-5 py-5 bg-gradient-to-br from-white/90 to-white/70 text-black rounded-2xl font-semibold transition-all duration-300 hover:shadow-[0_8px_32px_rgba(255,255,255,0.2)] hover:-translate-y-0.5 active:translate-y-0 disabled:bg-white/10 disabled:text-white/40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none relative overflow-hidden;
+  }
+}
+
+@layer utilities {
+  .bg-radial-gradient {
+    background: radial-gradient(circle at 30% 20%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+  }
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+} 
