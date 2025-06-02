@@ -28,6 +28,9 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Ensure public directory exists
+RUN mkdir -p public
+
 # Build the application
 RUN npm run build
 
@@ -49,16 +52,22 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy built application
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# Copy public directory (it should exist now)
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Copy Python dependencies installation script
-COPY --chown=nextjs:nodejs scripts/install-python-deps.sh ./scripts/
+COPY scripts/install-python-deps.sh ./scripts/
 RUN chmod +x ./scripts/install-python-deps.sh
 
 # Install Python dependencies
 RUN ./scripts/install-python-deps.sh
+
+# Create additional directories and fix ownership
+RUN mkdir -p public/downloads temp && \
+    chown -R nextjs:nodejs /app
 
 # Set environment variables
 ENV NODE_ENV=production
